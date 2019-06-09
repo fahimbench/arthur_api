@@ -11,5 +11,9 @@ api:
   controller: App\Controller\AuthController::api
 
 login_check:
-  path:     /login_check
+  path: /login_check
   methods: [POST]
+
+gesdinet_jwt_refresh_token:
+    path: /login_refresh
+    controller: gesdinet.jwtrefreshtoken::refresh

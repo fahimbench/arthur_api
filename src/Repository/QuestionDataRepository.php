@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\QestionData;
+use App\Entity\QuestionData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method QestionData|null find($id, $lockMode = null, $lockVersion = null)
- * @method QestionData|null findOneBy(array $criteria, array $orderBy = null)
- * @method QestionData[]    findAll()
- * @method QestionData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method QuestionData|null find($id, $lockMode = null, $lockVersion = null)
+ * @method QuestionData|null findOneBy(array $criteria, array $orderBy = null)
+ * @method QuestionData[]    findAll()
+ * @method QuestionData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class QestionDataRepository extends ServiceEntityRepository
+class QuestionDataRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, QestionData::class);
+        parent::__construct($registry, QuestionData::class);
     }
 
     // /**
-    //  * @return QestionData[] Returns an array of QestionData objects
+    //  * @return QuestionData[] Returns an array of QuestionData objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class QestionDataRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?QestionData
+    public function findOneBySomeField($value): ?QuestionData
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.exampleField = :val')
