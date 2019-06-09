@@ -3,31 +3,39 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 
 
-class PlannerFixtures extends Fixture
+class UserFixtures extends Fixture
 {
+    private $_encoder;
 
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
         $connection = $em->getConnection();
         $platform = $connection->getDatabasePlatform();
-        $list = ["niko_niko_planner","niko_niko_groups","niko_niko_data"];
+        $list = ["users"];
         $connection->query('SET FOREIGN_KEY_CHECKS=0');
         foreach($list as $value){
             $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
         }
         $connection->query('SET FOREIGN_KEY_CHECKS=1');
+
+        $this->_encoder = $encoder;
     }
 
     public function load(ObjectManager $manager)
     {
-        
+        $user = new User("admin");
+        $encoded = $this->_encoder->encodePassword($user, "ded4ew");
+        $user->setPassword($encoded);
+        $manager->persist($user);
+        $manager->flush();
     }
 }
