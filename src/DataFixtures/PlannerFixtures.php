@@ -28,6 +28,8 @@ class PlannerFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $users_id = ["USLACKBOT", "UB7S4S8UW","UBT8HLYGN","UBTHBKUTZ","UDH83RKNG","UEK5Q3AMT","UELF9R11P","UEUJPF3LM","UGNHXFP0D","UGQR5V2A2","UHADP7EFQ"];
+        $promo = ["2018-2019 dev. web iot-valley", "2019 concepteur java moissac"];
         
     }
 }
