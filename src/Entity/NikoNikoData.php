@@ -29,10 +29,10 @@ class NikoNikoData
     private $result;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NikoNikoPlanner", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\NikoNikoGroups", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fk_id_nikonikoplanner;
+    private $fk_id_nikonikogroups;
 
     public function getId(): ?int
     {
@@ -63,15 +63,17 @@ class NikoNikoData
         return $this;
     }
 
-    public function getFkIdNikonikoplanner(): ?NikoNikoPlanner
+    public function getFkIdNikonikogroups(): ?NikoNikoGroups
     {
-        return $this->fk_id_nikonikoplanner;
+        return $this->fk_id_nikonikogroups;
     }
 
-    public function setFkIdNikonikoplanner(NikoNikoPlanner $fk_id_nikonikoplanner): self
+    public function setFkIdNikonikogroups(?NikoNikoGroups $fk_id_nikonikogroups): self
     {
-        $this->fk_id_nikonikoplanner = $fk_id_nikonikoplanner;
+        $this->fk_id_nikonikogroups = $fk_id_nikonikogroups;
 
         return $this;
     }
+
+
 }
