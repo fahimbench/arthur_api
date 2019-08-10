@@ -34,13 +34,17 @@ class UserFixtures extends Fixture
     {
         $users = [
             ["arthur", "b8kyh"],
-            ["admin", "ded4ew"]
+            ["admin", "ded4ew", "ROLE_SUPER_ADMIN"]
         ];
 
         foreach($users as $user){
-            $userf = new User($user[0]);
+            $userf = new User();
             $encoded = $this->_encoder->encodePassword($userf, $user[1]);
-            $userf->setPassword($encoded);
+            $userf->setUsername($user[0])
+                  ->setPassword($encoded);
+//            if($user[0] == 'admin'){
+//                $userf->setRoles($user[2]);
+//            }
             $manager->persist($userf);
         }
         

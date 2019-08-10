@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
 use \Exception;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
 class ApiDataFixtureTestCase extends WebTestCase
@@ -17,11 +16,10 @@ class ApiDataFixtureTestCase extends WebTestCase
     /** @var  Application $application */
     protected static $application;
 
-    /** @var  HttpClientInterface $client */
-    protected $client;
-
     /** @var  EntityManager $entityManager */
     protected $entityManager;
+
+    protected static $token;
 
     /**
      * @throws Exception
@@ -66,6 +64,7 @@ class ApiDataFixtureTestCase extends WebTestCase
 
 //    /**
 //     * @throws Exception
+//     * Supprime la base de donnée à la fin des tests !
 //     */
 //    protected function tearDown()
 //    {
