@@ -1,63 +1,51 @@
 <?php
+
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
- * @ORM\Table(name="users")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
     /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
+
     /**
-     * @ORM\Column(type="string", length=500)
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
     private $password;
-    /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive;
-    public function __construct($username)
-    {
-        $this->isActive = true;
-        $this->username = $username;
-    }
-    public function getUsername()
-    {
-        return $this->username;
-    }
-    public function getSalt()
-    {
-        return null;
-    }
-    public function getPassword()
-    {
-        return $this->password;
-    }
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
-    public function eraseCredentials()
-    {
-    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->username;
     }
 
     public function setUsername(string $username): self
@@ -67,15 +55,54 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getIsActive(): ?bool
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        return $this->isActive;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
-    public function setIsActive(bool $isActive): self
+    public function setRoles(array $roles): self
     {
-        $this->isActive = $isActive;
+        $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
