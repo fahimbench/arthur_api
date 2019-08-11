@@ -29,15 +29,15 @@ class QuestionData
     private $answers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\QuestionTheme", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $fk_id_theme;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $result_text;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\QuestionTheme", inversedBy="questionData")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $questionTheme;
 
     public function getId(): ?int
     {
@@ -68,18 +68,6 @@ class QuestionData
         return $this;
     }
 
-    public function getFkIdTheme(): ?QuestionTheme
-    {
-        return $this->fk_id_theme;
-    }
-
-    public function setFkIdTheme(QuestionTheme $fk_id_theme): self
-    {
-        $this->fk_id_theme = $fk_id_theme;
-
-        return $this;
-    }
-
     public function getResultText(): ?string
     {
         return $this->result_text;
@@ -91,4 +79,17 @@ class QuestionData
 
         return $this;
     }
+
+    public function getQuestionTheme(): ?QuestionTheme
+    {
+        return $this->questionTheme;
+    }
+
+    public function setQuestionTheme(?QuestionTheme $questionTheme): self
+    {
+        $this->questionTheme = $questionTheme;
+
+        return $this;
+    }
+
 }
