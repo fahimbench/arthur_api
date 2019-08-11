@@ -8,30 +8,49 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
 use \Exception;
+use Symfony\Component\HttpClient\HttpClient;
 
 
 class ApiDataFixtureTestCase extends WebTestCase
 {
 
+    /** @var HttpClient $httpClient */
+    protected static $httpClient;
+
     /** @var  Application $application */
     protected static $application;
 
-    /** @var  EntityManager $entityManager */
-    protected $entityManager;
+    /** @var EntityManager */
+    protected static $em;
 
-    protected static $token;
+    protected static $token_user;
+    protected static $token_admin;
+    protected static $token_superadmin;
+    protected static $last_element;
 
     /**
+     * ApiDataFixtureTestCase constructor.
+     * @param null $name
+     * @param array $data
+     * @param string $dataName
      * @throws Exception
      */
-    public function setUp()
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         self::runCommand('doctrine:database:drop --force');
         self::runCommand('doctrine:database:create');
         self::runCommand('doctrine:schema:create');
         self::runCommand('doctrine:schema:update');
         self::runCommand('doctrine:fixtures:load --append --no-interaction');
+        self::$httpClient = HttpClient::create(['base_uri' => $_SERVER['BASE_URI']]);
+        self::$em = (self::bootKernel())->getContainer()->get('doctrine')->getManager();
 
+        parent::__construct($name, $data, $dataName);
+
+    }
+
+    public function setUp()
+    {
         parent::setUp();
     }
 
