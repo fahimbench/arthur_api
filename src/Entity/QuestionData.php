@@ -35,7 +35,7 @@ class QuestionData
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\QuestionTheme", inversedBy="questionData")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $questionTheme;
 

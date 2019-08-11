@@ -30,7 +30,7 @@ class NikoNikoData
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\NikoNikoGroups", inversedBy="nikoNikoData")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $nikonikogroups;
 
