@@ -29,10 +29,22 @@ class NikoNikoData
     private $result;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NikoNikoGroups", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\NikoNikoGroups", inversedBy="nikoNikoData")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fk_id_nikonikogroups;
+    private $nikonikogroups;
+
+    public function getNikonikogroups(): ?NikoNikoGroups
+    {
+        return $this->nikonikogroups;
+    }
+
+    public function setNikonikogroups(?NikoNikoGroups $nikonikogroups): self
+    {
+        $this->nikonikogroups = $nikonikogroups;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -62,18 +74,5 @@ class NikoNikoData
 
         return $this;
     }
-
-    public function getFkIdNikonikogroups(): ?NikoNikoGroups
-    {
-        return $this->fk_id_nikonikogroups;
-    }
-
-    public function setFkIdNikonikogroups(?NikoNikoGroups $fk_id_nikonikogroups): self
-    {
-        $this->fk_id_nikonikogroups = $fk_id_nikonikogroups;
-
-        return $this;
-    }
-
 
 }

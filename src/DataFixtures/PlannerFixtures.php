@@ -53,7 +53,7 @@ class PlannerFixtures extends Fixture
 
         foreach ($all2ngroups as $group){
             $data = new NikoNikoData();
-            $data->setFkIdNikonikogroups($group)
+            $data->setNikonikogroups($group)
                 ->setDateSend(\DateTime::createFromFormat('Y-m-d H:i:s', (new \DateTime())->format('Y-m-d H:i:s')));
             $results = [];
                 foreach($users_id as $user){

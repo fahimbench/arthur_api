@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +44,47 @@ class NikoNikoGroups
      * @ORM\Column(type="json_array", nullable=true)
      */
     private $date_ignore;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NikoNikoData", mappedBy="nikonikogroups", orphanRemoval=true)
+     */
+    private $nikoNikoData;
+
+    public function __construct()
+    {
+        $this->nikoNikoData = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|NikoNikoData[]
+     */
+    public function getNikoNikoData(): Collection
+    {
+        return $this->nikoNikoData;
+    }
+
+    public function addNikoNikoData(NikoNikoData $nikoNikoData): self
+    {
+        if (!$this->nikoNikoData->contains($nikoNikoData)) {
+            $this->nikoNikoData[] = $nikoNikoData;
+            $nikoNikoData->setNikonikogroups($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNikoNikoData(NikoNikoData $nikoNikoData): self
+    {
+        if ($this->nikoNikoData->contains($nikoNikoData)) {
+            $this->nikoNikoData->removeElement($nikoNikoData);
+            // set the owning side to null (unless already changed)
+            if ($nikoNikoData->getNikonikogroups() === $this) {
+                $nikoNikoData->setNikonikogroups(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
