@@ -9,12 +9,15 @@ class AuthController extends AbstractController
 {
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         $em = $this->getDoctrine()->getManager();
         
         $username = $request->request->get('_username');
         $password = $request->request->get('_password');
         
         $user = new User();
+        $user->setUsername($username);
         $user->setPassword($encoder->encodePassword($user, $password));
         $em->persist($user);
         $em->flush();

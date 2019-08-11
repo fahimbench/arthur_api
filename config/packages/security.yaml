@@ -38,7 +38,11 @@ security:
         register:
             pattern:  ^/register
             stateless: true
-            anonymous: true
+            anonymous: false
+            provider: chain_provider
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
         refresh:
             pattern:  ^/login_refresh
             stateless: true
@@ -54,5 +58,5 @@ security:
     access_control:
         - { path: ^/login_refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/register, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
