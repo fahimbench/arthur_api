@@ -18,14 +18,14 @@ class UserFixtures extends Fixture
 
     public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
-        $connection = $em->getConnection();
-        $platform = $connection->getDatabasePlatform();
-        $list = ["users"];
-        $connection->query('SET FOREIGN_KEY_CHECKS=0');
-        foreach($list as $value){
-            $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
-        }
-        $connection->query('SET FOREIGN_KEY_CHECKS=1');
+//        $connection = $em->getConnection();
+//        $platform = $connection->getDatabasePlatform();
+//        $list = ["user"];
+//        $connection->query('SET FOREIGN_KEY_CHECKS=0');
+//        foreach($list as $value){
+//            $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
+//        }
+//        $connection->query('SET FOREIGN_KEY_CHECKS=1');
 
         $this->_encoder = $encoder;
     }
@@ -34,7 +34,7 @@ class UserFixtures extends Fixture
     {
         $users = [
             ["arthur", "b8kyh"],
-            ["admin", "ded4ew", "ROLE_SUPER_ADMIN"]
+            ["admin", "ded4ew", "ROLE_ADMIN"]
         ];
 
         foreach($users as $user){
@@ -42,9 +42,9 @@ class UserFixtures extends Fixture
             $encoded = $this->_encoder->encodePassword($userf, $user[1]);
             $userf->setUsername($user[0])
                   ->setPassword($encoded);
-//            if($user[0] == 'admin'){
-//                $userf->setRoles($user[2]);
-//            }
+            if(!empty($user[2])){
+                $userf->setRoles([$user[2]]);
+            }
             $manager->persist($userf);
         }
         
