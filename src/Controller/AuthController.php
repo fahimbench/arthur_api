@@ -22,9 +22,9 @@ class AuthController extends AbstractController
             $token = $request->get('token');
             $jwtencoder->decode($token);
         }catch(JWTDecodeFailureException $e){
-            return $this->json(json_encode(["ok"=>false]));
+            return $this->json(["ok"=>false]);
         }
-        return $this->json(json_encode(["ok"=>true]));
+        return $this->json(["ok"=>true]);
     }
 
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
