@@ -4,7 +4,7 @@
 register:
   path: /register
   controller: App\Controller\AuthController::register
-  methods: POST
+  methods: POS
 
 api:
   path: /api
@@ -12,6 +12,11 @@ api:
 
 login_check:
   path: /login_check
+  methods: [POST]
+
+token_tester:
+  path: /token_tester
+  controller: App\Controller\AuthController::testToken
   methods: [POST]
 
 gesdinet_jwt_refresh_token:
