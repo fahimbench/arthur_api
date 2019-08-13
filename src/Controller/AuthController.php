@@ -11,22 +11,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 class AuthController extends AbstractController
 {
+
     /**
-     * @Route("/token_tester", name="token_tester", methods={"POST"})
-     * @param JWTEncoderInterface $jwtencoder
-     * @param Request $request
+     * @Route("/me", methods={"POST"})
      * @return JsonResponse
      */
-    public function testToken(JWTEncoderInterface $jwtencoder, Request $request){
-        try{
-            $token = $request->get('token');
-            $jwtencoder->decode($token);
-        }catch(JWTDecodeFailureException $e){
-            return $this->json(["ok"=>false]);
-        }
-        return $this->json(["ok"=>true]);
+    public function me(){
+        return $this->json(['text' => 'success']);
     }
-
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
