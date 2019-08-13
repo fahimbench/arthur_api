@@ -14,9 +14,8 @@ login_check:
   path: /login_check
   methods: [POST]
 
-token_tester:
-  path: /token_tester
-  controller: App\Controller\AuthController::testToken
+me:
+  path: /me
   methods: [POST]
 
 gesdinet_jwt_refresh_token:

@@ -55,8 +55,16 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+        me:
+            pattern: ^/me
+            stateless: true
+            anonymous: false
+            provider: chain_provider
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
     access_control:
-        - { path: ^/token_tester, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/me, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/login_refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, roles: IS_AUTHENTICATED_FULLY }
