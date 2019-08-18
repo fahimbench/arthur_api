@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,21 +23,25 @@ class NikoNikoGroups
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="json_array")
+     * @Assert\NotBlank
      */
     private $users;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank
      */
     private $date_start;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank
      */
     private $date_end;
 

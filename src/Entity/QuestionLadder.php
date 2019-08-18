@@ -20,6 +20,7 @@ class QuestionLadder
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $user;
 
