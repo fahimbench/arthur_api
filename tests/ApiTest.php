@@ -286,9 +286,9 @@ class ApiTest extends ApiDataFixtureTestCase {
     {
         $data = [
             'question' => 'Qui est le fondateur de microsoft ?',
-            'answers' => '{"Bill Gates":1, "Benjamin Gates":0, "Nicolas Cage":0, "Steve Jobs": 0}',
+            'answers' => '[{"Bill Gates":1, "Benjamin Gates":0, "Nicolas Cage":0, "Steve Jobs": 0}]',
             'resultText' => 'C\'est Bill Gates.',
-            'questionTheme' => '/api/question_themes/2'
+            'questionTheme' => '/api/question_themes/6'
         ];
         $response = self::$httpClient->request('POST', '/api/question_datas',[
             'auth_bearer' => self::$token_admin,
