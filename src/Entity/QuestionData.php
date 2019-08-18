@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups"={"question"}})
  * @ORM\Entity(repositoryClass="App\Repository\QuestionDataRepository")
  */
 class QuestionData
@@ -16,29 +17,34 @@ class QuestionData
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("question")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("question")
      */
     private $question;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("question")
      */
     private $answers;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("question")
      */
-    private $result_text;
+    private $resultText;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\QuestionTheme", inversedBy="questionData")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Groups("question")
      */
     private $questionTheme;
 
@@ -73,12 +79,12 @@ class QuestionData
 
     public function getResultText(): ?string
     {
-        return $this->result_text;
+        return $this->resultText;
     }
 
-    public function setResultText(?string $result_text): self
+    public function setResultText(?string $resultText): self
     {
-        $this->result_text = $result_text;
+        $this->resultText = $resultText;
 
         return $this;
     }
