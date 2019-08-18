@@ -4,7 +4,7 @@
 register:
   path: /register
   controller: App\Controller\AuthController::register
-  methods: POS
+  methods: [POST]
 
 api:
   path: /api
