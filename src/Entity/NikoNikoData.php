@@ -26,7 +26,7 @@ class NikoNikoData
     private $date_send;
 
     /**
-     * @ORM\Column(type="json_array", nullable=true)
+     * @ORM\Column(type="json", nullable=true)
      */
     private $result;
 

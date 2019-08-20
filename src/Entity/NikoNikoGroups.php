@@ -28,7 +28,7 @@ class NikoNikoGroups
     private $name;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json")
      * @Assert\NotBlank
      */
     private $users;
@@ -46,7 +46,7 @@ class NikoNikoGroups
     private $date_end;
 
     /**
-     * @ORM\Column(type="json_array", nullable=true)
+     * @ORM\Column(type="json", nullable=true)
      */
     private $date_ignore;
 

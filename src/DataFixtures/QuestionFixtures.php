@@ -29,6 +29,12 @@ class QuestionFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $theme_array = ["Culture G", "HTML/CSS", "JAVA", "J2E", "JS", "Algorithmie", "SQL", "PHP"];
+        $response = [
+            ["text" => "answer1", "bog" => true],
+            ["text" => "answer2", "bog" => false],
+            ["text" => "answer3", "bog" => false],
+            ["text" => "answer4", "bog" => false],
+        ];
         foreach($theme_array as $theme){
             $qtheme = new QuestionTheme();
             $qtheme->setName($theme);
@@ -36,7 +42,7 @@ class QuestionFixtures extends Fixture
             for($i = 1; $i <= rand(2, 10); $i++){
                 $qdata = new QuestionData();
                 $qdata  ->setQuestion("Question$i du theme ".$qtheme->getName())
-                        ->setAnswers("{\"answer1\":0, \"answer2\":0, \"answer3\":1, \"answer4\":0}")
+                        ->setAnswers(json_encode($response))
                         ->setQuestionTheme($qtheme)
                         ->setResultText("Blabla un texte explicatif de la réponse ou un lien");
                 $manager->persist($qdata);
