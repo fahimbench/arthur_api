@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\NikoNikoGroups;
+use App\Entity\NikoNikoUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method NikoNikoGroups|null find($id, $lockMode = null, $lockVersion = null)
- * @method NikoNikoGroups|null findOneBy(array $criteria, array $orderBy = null)
- * @method NikoNikoGroups[]    findAll()
- * @method NikoNikoGroups[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method NikoNikoUser|null find($id, $lockMode = null, $lockVersion = null)
+ * @method NikoNikoUser|null findOneBy(array $criteria, array $orderBy = null)
+ * @method NikoNikoUser[]    findAll()
+ * @method NikoNikoUser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NikoNikoGroupsRepository extends ServiceEntityRepository
+class NikoNikoUserRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, NikoNikoGroups::class);
+        parent::__construct($registry, NikoNikoUser::class);
     }
 
     // /**
-    //  * @return NikoNikoGroups[] Returns an array of NikoNikoGroups objects
+    //  * @return NikoNikoUser[] Returns an array of NikoNikoUser objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class NikoNikoGroupsRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?NikoNikoGroups
+    public function findOneBySomeField($value): ?NikoNikoUser
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.exampleField = :val')

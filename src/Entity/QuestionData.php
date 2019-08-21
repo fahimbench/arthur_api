@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ApiResource(normalizationContext={"groups"={"question"}})
+ * @ApiFilter(SearchFilter::class, properties={"id": "exact", "question": "partial", "answers": "partial", "resultText": "partial", "questionTheme": "exact", "questionLadders": "exact"})
  * @ORM\Entity(repositoryClass="App\Repository\QuestionDataRepository")
  */
 class QuestionData
@@ -47,6 +52,16 @@ class QuestionData
      * @Groups("question")
      */
     private $questionTheme;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\QuestionLadder", mappedBy="questionData", orphanRemoval=true)
+     */
+    private $questionLadders;
+
+    public function __construct()
+    {
+        $this->questionLadders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -97,6 +112,37 @@ class QuestionData
     public function setQuestionTheme(?QuestionTheme $questionTheme): self
     {
         $this->questionTheme = $questionTheme;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|QuestionLadder[]
+     */
+    public function getQuestionLadders(): Collection
+    {
+        return $this->questionLadders;
+    }
+
+    public function addQuestionLadder(QuestionLadder $questionLadder): self
+    {
+        if (!$this->questionLadders->contains($questionLadder)) {
+            $this->questionLadders[] = $questionLadder;
+            $questionLadder->setQuestionData($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestionLadder(QuestionLadder $questionLadder): self
+    {
+        if ($this->questionLadders->contains($questionLadder)) {
+            $this->questionLadders->removeElement($questionLadder);
+            // set the owning side to null (unless already changed)
+            if ($questionLadder->getQuestionData() === $this) {
+                $questionLadder->setQuestionData(null);
+            }
+        }
 
         return $this;
     }
