@@ -25,7 +25,7 @@ class NikoNikoDataResult
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\NikoNikoData", inversedBy="nikoNikoDataResults")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $nikoNikoData;
 

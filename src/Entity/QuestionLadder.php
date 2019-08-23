@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Controller\QuestionOperation;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -10,7 +11,15 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 
 /**
- * @ApiResource()
+ * @ApiResource(collectionOperations={
+ *     "post",
+ *     "get",
+ *     "get_groupby"={
+ *         "method"="GET",
+ *         "path"="/question_ladders/action",
+ *         "controller"=QuestionOperation::class,
+ *     }
+ * })
  * @ApiFilter(SearchFilter::class, properties={"id": "exact", "user": "exact", "questionData": "exact"})
  * @ApiFilter(DateFilter::class, properties={"dateSend"})
  * @ORM\Entity(repositoryClass="App\Repository\QuestionLadderRepository")
@@ -32,7 +41,7 @@ class QuestionLadder
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\QuestionData", inversedBy="questionLadders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $questionData;
 

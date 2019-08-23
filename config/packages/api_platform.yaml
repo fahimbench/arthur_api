@@ -4,3 +4,6 @@ api_platform:
     collection:
         pagination:
             enabled: false
+    exception_to_status:
+        App\Exception\ErrorActionCallException: 400
+        App\Exception\UserExistInAnyGroupException: 400

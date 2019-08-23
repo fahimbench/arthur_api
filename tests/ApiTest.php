@@ -387,7 +387,7 @@ class ApiTest extends ApiDataFixtureTestCase {
     {
         $data = [
             'user' => 'ABC123',
-            'score' => 42
+            'questionData' => '/api/question_datas/5'
         ];
         $response = self::$httpClient->request('POST', '/api/question_ladders',[
             'auth_bearer' => self::$token_admin,
@@ -424,7 +424,7 @@ class ApiTest extends ApiDataFixtureTestCase {
     public function updateOneQuestionLadder()
     {
         $data = [
-            'score' => 69,
+            'questionData' => '/api/question_datas/5',
         ];
         $response = self::$httpClient->request('PUT', '/api/question_ladders/'.self::$last_element,[
             'auth_bearer' => self::$token_admin,

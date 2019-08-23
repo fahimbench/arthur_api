@@ -19,32 +19,13 @@ class QuestionLadderRepository extends ServiceEntityRepository
         parent::__construct($registry, QuestionLadder::class);
     }
 
-    // /**
-    //  * @return QuestionLadder[] Returns an array of QuestionLadder objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('q.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    public function findAllAndGroupBy(){
+        return $this->createQueryBuilder('l')
+                ->select('count(l) as score, l.user as user, max(l.dateSend) as dateSend')
+                ->groupBy('l.user')
+                ->orderBy('score', 'DESC')
+//              ->setMaxResults(10)
+                ->getQuery()
+                ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?QuestionLadder
-    {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
