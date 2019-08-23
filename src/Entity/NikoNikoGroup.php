@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,7 +19,8 @@ use App\Controller\GroupOperation;
  *         "path"="/niko_niko_groups/action",
  *         "controller"=GroupOperation::class
  *     }
- *  })
+ *  },
+ *     normalizationContext={"groups"={"datagroup"}})
  * @ORM\Entity(repositoryClass="App\Repository\NikoNikoGroupRepository")
  */
 class NikoNikoGroup
@@ -27,44 +29,53 @@ class NikoNikoGroup
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("datagroup")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups("data")
+     * @Groups("datagroup")
      */
     private $name;
 
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank
+     * @Groups("datagroup")
      */
     private $dateStart;
 
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank
+     * @Groups("datagroup")
      */
     private $dateEnd;
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Groups("datagroup")
      */
     private $dateIgnore;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\NikoNikoData", mappedBy="nikoNikoGroups", orphanRemoval=true)
+     * @Groups("datagroup")
      */
     private $nikoNikoData;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("datagroup")
      */
     private $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\NikoNikoUser", mappedBy="nikoNikoGroups", orphanRemoval=true)
+     * @Groups("datagroup")
      */
     private $nikoNikoUsers;
 

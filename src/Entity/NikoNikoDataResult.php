@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -20,6 +21,7 @@ class NikoNikoDataResult
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("data")
      */
     private $id;
 
@@ -31,11 +33,13 @@ class NikoNikoDataResult
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("data")
      */
     private $dateResponse;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("data")
      */
     private $score;
 
