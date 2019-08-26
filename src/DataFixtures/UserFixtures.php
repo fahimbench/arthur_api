@@ -18,14 +18,14 @@ class UserFixtures extends Fixture
 
     public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
-//        $connection = $em->getConnection();
-//        $platform = $connection->getDatabasePlatform();
-//        $list = ["user"];
-//        $connection->query('SET FOREIGN_KEY_CHECKS=0');
-//        foreach($list as $value){
-//            $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
-//        }
-//        $connection->query('SET FOREIGN_KEY_CHECKS=1');
+        $connection = $em->getConnection();
+        $platform = $connection->getDatabasePlatform();
+        $list = ["user"];
+        $connection->query('SET FOREIGN_KEY_CHECKS=0');
+        foreach($list as $value){
+            $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
+        }
+        $connection->query('SET FOREIGN_KEY_CHECKS=1');
 
         $this->_encoder = $encoder;
     }
