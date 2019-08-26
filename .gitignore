@@ -24,3 +24,5 @@
 ###< symfony/phpunit-bridge ###
 
 nohup\.out
+
+/prod.sh
