@@ -19,32 +19,17 @@ class NikoNikoUserRepository extends ServiceEntityRepository
         parent::__construct($registry, NikoNikoUser::class);
     }
 
-    // /**
-    //  * @return NikoNikoUser[] Returns an array of NikoNikoUser objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    /**
+     * @param $group
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findAndCountUserInGroup($group){
+        return $this->createQueryBuilder('u')
+                    ->select('count(u.nikoNikoGroups) as count')
+                    ->where('u.nikoNikoGroups = :group')
+                    ->setParameter('group', $group)
+                    ->getQuery()
+                    ->getOneOrNullResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?NikoNikoUser
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

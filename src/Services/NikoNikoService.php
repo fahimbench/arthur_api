@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\NikoNikoDataResult;
 use App\Entity\NikoNikoGroup;
 use App\Entity\NikoNikoUser;
 use App\Exception\UserExistInAnyGroupException;
@@ -9,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Date;
 
 class NikoNikoService
@@ -25,6 +27,75 @@ class NikoNikoService
     {
         $this->em = $em;
         $this->requestStack = $requestStack;
+    }
+
+    /**
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getDataGroup(){
+        $group = $this->requestStack->getMasterRequest()->get('group');
+        $dateStart = $this->requestStack->getMasterRequest()->get('dateStart');
+        $dateEnd = $this->requestStack->getMasterRequest()->get('dateEnd');
+
+        if(!ctype_digit(strval($group))){
+            $group = 1;
+        }
+
+        try{
+            if(!$dateStart){
+                $dateStart = (new \DateTime('first day of this month'));
+            }else{
+                $dateStart = (new \DateTime($dateStart));
+            }
+
+            if(!$dateEnd){
+                $dateEnd = (new \DateTime('last day of this month'));
+            }else{
+                $dateEnd = (new \DateTime($dateEnd));
+            }
+
+            if($dateStart > $dateEnd){
+                return ['ok' => false, 'message' => "Vous ne pouvez pas chercher avec une date de début commençant après la fin"];
+            }
+
+        }catch(\Exception $e){
+            return ['ok' => false, 'message', 'message' => 'Une ou plusieurs dates nécessaire au graphique sont incorrecte'];
+        }
+
+        $text = $this->em->getRepository(NikoNikoGroup::class)->findOneBy([
+            'id' => $group
+        ])->getName();
+
+        $labels = [];
+        $data = [];
+        $scoreNull = [];
+        $scoreBlank = [];
+        $participants = [];
+
+        if($dateStart->format('D') != 'Mon'){
+            $dateStart->modify('next monday');
+        }
+        do {
+            $score = $this->scoreDate($group, $dateStart->format('Y-m-d'));
+            $labels[] = $dateStart->format('Y-m-d');
+            $data[] = $score['scorePercent'];
+            $scoreNull[] = $score['scoreNull'] ?: 0;
+            $scoreBlank[] = $score['scoreBlank'] ?: 0;
+            $participants[] = $score['participants'] ?: 0;
+            $dateStart->modify('next monday');
+        }while($dateStart <= $dateEnd);
+
+        $return = ['ok' => true, 'data' => [
+            'labels' => $labels,
+            'text' => $text,
+            'data' => $data,
+            'participants' => $participants,
+            'abstention' => $scoreNull,
+            'blank' => $scoreBlank
+        ]];
+
+        return $return;
     }
 
     /**
@@ -233,5 +304,35 @@ class NikoNikoService
             return ['ok' => false, 'message' => "Une ou plusieurs des dates ne sont pas valide"];
         }
         return ['ok' => true];
+    }
+
+    /**
+     * @param $group
+     * @param $date
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    private function scoreDate($group, $date){
+        $scoreRepo = $this->em->getRepository(NikoNikoDataResult::class);
+        $scoreNormal = $scoreRepo->findDataWithDate($group, $date)['score'];
+        $scoreNull = $scoreRepo->findNullDataWithDate($group, $date);
+        $scoreBlank = $scoreRepo->findMinusOneDataWithDate($group, $date);
+        $users = $this->em->getRepository(NikoNikoUser::class)->findAndCountUserInGroup($group)['count'];
+
+        if($scoreNormal && $users) {
+            return [
+                'scorePercent' => ceil(($scoreNormal / ($users * 4)) * 100),
+                'scoreNull' =>  count($scoreNull),
+                'scoreBlank' =>  count($scoreBlank),
+                'participants' => $users - (count($scoreNull) + count($scoreBlank))
+            ];
+        }else{
+            return [
+                'scorePercent' => null,
+                'scoreNull' => null,
+                'scoreBlank' => null,
+                'participants' => null
+            ];
+        }
     }
 }

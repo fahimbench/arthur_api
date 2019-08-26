@@ -36,6 +36,9 @@ class GroupOperation
 
         if(method_exists($this->nikonikoService, $call)){
             $response = $this->nikonikoService->$call();
+//            if(isset($response->headers) && $response->headers->get('Content-Type') === 'text/csv'){
+//                return $response;
+//            }
             if(!$response['ok']){
                 throw new HttpException(400, $response['message']);
             }

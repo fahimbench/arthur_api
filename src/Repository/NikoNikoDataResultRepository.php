@@ -19,32 +19,64 @@ class NikoNikoDataResultRepository extends ServiceEntityRepository
         parent::__construct($registry, NikoNikoDataResult::class);
     }
 
-    // /**
-    //  * @return NikoNikoDataResult[] Returns an array of NikoNikoDataResult objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    /**
+     * @param $group
+     * @param $date
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findDataWithDate($group, $date){
+        return $this->createQueryBuilder('r')
+                    ->leftJoin('r.nikoNikoData', 'd')
+                    ->select('sum(r.score) as score')
+                    ->where('d.nikoNikoGroups = :group')
+                    ->andWhere('d.dateSend LIKE :date')
+                    ->andWhere('r.score >= 0')
+                    ->setParameters([
+                        'date' => '%'.$date.'%',
+                        'group' =>  $group
+                    ])
+                    ->getQuery()
+                    ->getOneOrNullResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?NikoNikoDataResult
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
+    /**
+     * @param $group
+     * @param $date
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findNullDataWithDate($group, $date){
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.nikoNikoData', 'd')
+            ->where('d.nikoNikoGroups = :group')
+            ->andWhere('d.dateSend LIKE :date')
+            ->andWhere("r.score is null")
+            ->setParameters([
+                'date' => '%'.$date.'%',
+                'group' =>  $group
+            ])
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
+
+    /**
+     * @param $group
+     * @param $date
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findMinusOneDataWithDate($group, $date){
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.nikoNikoData', 'd')
+            ->where('d.nikoNikoGroups = :group')
+            ->andWhere('d.dateSend LIKE :date')
+            ->andWhere('r.score = -1')
+            ->setParameters([
+                'date' => '%'.$date.'%',
+                'group' =>  $group
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 }
