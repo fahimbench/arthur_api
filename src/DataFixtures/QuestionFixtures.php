@@ -16,38 +16,53 @@ class QuestionFixtures extends Fixture
 
     public function __construct(EntityManagerInterface $em)
     {
-//        $connection = $em->getConnection();
-//        $platform = $connection->getDatabasePlatform();
-//        $list = ["question_data","question_ladder","question_theme"];
-//        $connection->query('SET FOREIGN_KEY_CHECKS=0');
-//        foreach($list as $value){
-//            $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
-//        }
-//        $connection->query('SET FOREIGN_KEY_CHECKS=1');
+        $connection = $em->getConnection();
+        $platform = $connection->getDatabasePlatform();
+        $list = ["question_data","question_ladder","question_theme"];
+        $connection->query('SET FOREIGN_KEY_CHECKS=0');
+        foreach($list as $value){
+            $connection->executeUpdate($platform->getTruncateTableSQL($value, false));
+        }
+        $connection->query('SET FOREIGN_KEY_CHECKS=1');
     }
 
     public function load(ObjectManager $manager)
     {
+        $users_id = ["USLACKBOT", "UB7S4S8UW","UBT8HLYGN","UBTHBKUTZ","UDH83RKNG","UEK5Q3AMT","UELF9R11P","UEUJPF3LM","UGNHXFP0D","UGQR5V2A2","UHADP7EFQ"];
         $theme_array = ["Culture G", "HTML/CSS", "JAVA", "J2E", "JS", "Algorithmie", "SQL", "PHP"];
-        foreach($theme_array as $theme){
-            $qtheme = new QuestionTheme();
-            $qtheme->setName($theme);
+        $response = [
+            ["text" => "answer1", "bog" => true],
+            ["text" => "answer2", "bog" => false],
+            ["text" => "answer3", "bog" => false],
+            ["text" => "answer4", "bog" => false],
+        ];
+        foreach ($theme_array as $theme){
+            $qtheme = (new QuestionTheme())
+                ->setName($theme);
             $manager->persist($qtheme);
             for($i = 1; $i <= rand(2, 10); $i++){
-                $qdata = new QuestionData();
-                $qdata  ->setQuestion("Question$i du theme ".$qtheme->getName())
-                        ->setAnswers("{\"answer1\":0, \"answer2\":0, \"answer3\":1, \"answer4\":0}")
-                        ->setQuestionTheme($qtheme)
-                        ->setResultText("Blabla un texte explicatif de la réponse ou un lien");
+                $qdata = (new QuestionData())
+                    ->setQuestionTheme($qtheme)
+                    ->setQuestion("Question$i du thème ".$qtheme->getName())
+                    ->setAnswers(json_encode($response))
+                    ->setResultText("Text explicatif de la réponse ou un lien");
                 $manager->persist($qdata);
             }
         }
-        for($i = 1; $i <= 25; $i++){
-            $qladder = new QuestionLadder();
-            $qladder->setUser(rand(100, 999)."ABC")
-                    ->setScore(rand(1,30));
-            $manager->persist($qladder);
-        }
         $manager->flush();
+        $qsdata = $manager->getRepository(QuestionData::class);
+        $dataCount = count($qsdata->findAll());
+
+        foreach ($users_id as $u){
+            for($i=0; $i < rand(5,100); $i++){
+                $qladder = (new QuestionLadder())
+                    ->setUser($u)
+                    ->setQuestionData($qsdata->find(rand(1, $dataCount)));
+                $manager->persist($qladder);
+                }
+        }
+
+        $manager->flush();
+
+        }
     }
-}
